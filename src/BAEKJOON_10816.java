@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.*;
-
 public class BAEKJOON_10816 {
     
     public class Node{
@@ -23,10 +22,6 @@ public class BAEKJOON_10816 {
         public void setRight(Node n){
             right = n;
         }
-        
-        public void addCount(){
-            count += 1;
-        }
     
         public Node getLeft(){
             return left;
@@ -39,6 +34,14 @@ public class BAEKJOON_10816 {
         public int getData(){
             return data;
         }
+
+        public int getCount(){
+            return count;
+        }
+
+        public void addCount(){
+            count += 1;
+        }
     }
     
     public Node root;
@@ -50,6 +53,7 @@ public class BAEKJOON_10816 {
         Node newNode = new Node(n);
         if(root == null){
             root = newNode;
+            root.addCount();
             return;
         }
         Node now = root;
@@ -63,30 +67,32 @@ public class BAEKJOON_10816 {
                 now = now.getRight();
                 if(now == null){
                     parent.setRight(newNode);
+                    parent.getRight().addCount();
                     return;
                 }
             } else {
                 now = now.getLeft();
                 if(now == null){
                     parent.setLeft(newNode);
+                    parent.getLeft().addCount();
                     return;
                 }
             }
         }
     }
     
-    public boolean search(int n){
+    public int search(int n){
         Node now = root;
         while(now != null){
             if(now.getData() == n){
-                return true;
+                return now.getCount();
             } else if (now.getData()<n){
                 now = now.getRight();
             } else {
                 now = now.getLeft();
             }
         }
-        return false;
+        return 0;
     }
     
     public static void main(String args[]) throws IOException{
@@ -111,16 +117,9 @@ public class BAEKJOON_10816 {
         StringTokenizer st1 = new StringTokenizer(str);
         for(int i = 0;i<m;i++){
             int tmp = Integer.parseInt(st1.nextToken());
-            if(b.search(tmp)){
-                bw.write(Integer.toString(1));
-                bw.newLine();
-            } else {
-                bw.write(Integer.toString(0));
-                bw.newLine();
-            }
+            bw.write(Integer.toString(b.search(tmp)) + " ");
         }
         bw.flush();
         bw.close();
     }
 }
-
